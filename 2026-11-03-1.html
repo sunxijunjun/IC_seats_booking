@@ -1,0 +1,135 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=referrer content=same-origin><title>Seat Booking</title>
+<link rel=preconnect href="https://fonts.googleapis.com"><link rel=preconnect href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel=stylesheet>
+<style>
+:root{--paper:#f7f6f3;--card:#fff;--ink:#1a1d23;--muted:#40464f;--red:#a6192e;--red-dark:#871425;--line:#e4e2dc;
+--radius:14px;--free:#eef6ef;--free-line:#bfdcc4;--taken:#f8e6e9;--taken-line:#e3b9c0;--class:#cfd1d5;--class-line:#a9adb4;
+--display:"Space Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+--body:system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--body);font-size:16px;line-height:1.6;color:var(--ink);background:var(--paper)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:10;background:rgba(247,246,243,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.brand img{height:58px;width:auto}
+.brand-name{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.01em;white-space:nowrap}
+.brand-name em{font-style:normal;color:var(--red)}
+.nav-links{display:flex;align-items:center;gap:24px;font-size:15px}
+.nav-links a:not(.btn){text-decoration:none;color:var(--muted)} .nav-links a:not(.btn):hover{color:var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin:0 0 10px}
+h1{font-family:var(--display);font-size:clamp(34px,5vw,50px);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin:0 0 14px}
+h2{font-family:var(--display);font-size:clamp(23px,3vw,30px);font-weight:700;letter-spacing:-.015em;line-height:1.15;margin:0}
+.hero{padding-top:44px;padding-bottom:4px}
+.note{font-family:var(--mono);font-size:13px;color:var(--muted);margin:0}
+section.wrap{padding-top:36px;padding-bottom:12px}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 16px;flex-wrap:wrap;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600;font-size:14px;padding:8px 16px;
+  border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;white-space:nowrap;cursor:pointer}
+.btn:hover{border-color:var(--ink)}
+.btn-red{background:var(--red);border-color:var(--red);color:#fff} .btn-red:hover{background:var(--red-dark);border-color:var(--red-dark)}
+input{font:inherit;font-size:15px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);min-width:0}
+input:focus{outline:2px solid var(--red);outline-offset:1px}
+.scroll{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:14px}
+table.data th{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;white-space:nowrap}
+table.data th,table.data td{padding:8px 10px;border-bottom:1px solid var(--line)}
+table.data tr:last-child td{border-bottom:none}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 36px;font-size:13.5px;color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed} .btn:disabled:hover{border-color:inherit}
+.msg{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;padding:12px 16px;margin:18px 0 0;font-weight:500}
+.small{font-size:13.5px;color:var(--muted)}
+.actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px}
+dialog{border:none;border-radius:16px;padding:24px;width:calc(100% - 32px);max-width:440px;color:var(--ink);box-shadow:0 24px 64px rgba(26,29,35,.3)}
+dialog::backdrop{background:rgba(26,29,35,.55)}
+dialog h3{font-family:var(--display);font-size:24px;letter-spacing:-.01em;margin:0 0 6px}
+dialog .sum{font-family:var(--mono);font-size:13.5px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0 4px}
+dialog label{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+dialog label input{display:block;width:100%;margin-top:6px;text-transform:none;letter-spacing:0;font-family:var(--body)}
+@media(max-width:560px){.wrap{padding:0 16px}.nav-links a:not(.btn){display:none}.nav .btn{padding:6px 12px;font-size:13px}.brand{gap:10px}.brand img{height:34px}.brand-name{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.window{font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px} .window b{color:var(--ink);font-weight:500}
+.cal th.today{color:var(--red)}
+.cal{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed;text-align:center}
+.cal th{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--muted);line-height:1.35}
+.cal th.slot{text-align:left;width:17%}
+.cal td{border-radius:8px;padding:0;font-family:var(--display);font-weight:600;font-size:15px}
+.cal td a{display:block;padding:8px 2px;text-decoration:none;color:var(--ink);border-radius:8px}
+.cal td a:hover{box-shadow:inset 0 0 0 2px rgba(26,29,35,.35)}
+.cal td small{display:block;font-family:var(--mono);font-weight:400;font-size:11px;color:var(--muted)}
+.cal td.on a{box-shadow:inset 0 0 0 2px var(--ink)}
+.legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:12px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend i.grad{width:64px;background:linear-gradient(90deg,hsl(120,55%,84%),hsl(60,55%,84%),hsl(0,55%,84%))}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.slot-pick{display:block;text-align:center;padding:12px 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);text-decoration:none}
+.slot-pick:hover{border-color:var(--ink)}
+.slot-pick b{display:block;font-family:var(--display);font-size:17px}
+.slot-pick span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.slot-pick.on{background:var(--ink);border-color:var(--ink);color:#fff} .slot-pick.on span{color:#c9ccd3}
+.step{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin:0 0 10px}
+.plan{margin-top:14px;padding:20px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),var(--card);background-size:28px 28px}
+.room{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.grp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+.seats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seat{position:relative;display:block;text-align:center;padding:7px 4px;border-radius:10px;line-height:1.25;min-width:0;overflow:hidden;
+  background:var(--free);border:1px solid var(--free-line);color:var(--ink);transition:border-color .15s,background .15s}
+label.seat{cursor:pointer} label.seat:hover{border-color:var(--red)}
+.seat input{position:absolute;opacity:0;pointer-events:none}
+.seat:has(input:checked){background:var(--red);border-color:var(--red);color:#fff} .seat:has(input:checked) span{color:#f3d5da}
+.seat:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px}
+.seat:has(input:disabled){cursor:not-allowed;opacity:.55} .seat:has(input:disabled):hover{border-color:var(--free-line)}
+.seat b{display:block;font-family:var(--display);font-size:16px;white-space:nowrap}
+.seat span{display:block;font-family:var(--mono);font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seat.t{background:var(--taken);border-color:var(--taken-line)} .seat.t span{color:var(--red-dark)}
+.seat.c{background:var(--class);border-color:var(--class-line)} .seat.c span{color:var(--ink)}
+.cal td.class a{color:var(--muted)}
+.seat.mine{background:#fff;border:2px dashed var(--ink)}
+.desk{background:var(--ink);color:#f4f3f0;text-align:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;padding:10px 0}
+.desk.a{border-radius:6px 6px 0 0;margin-top:8px} .desk.b{border-radius:0 0 6px 6px;margin-bottom:8px;border-top:1px dashed #6b7079}
+.plan-foot{display:flex;justify-content:space-between;gap:12px;margin:14px 2px 0;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.bar{position:sticky;bottom:12px;z-index:5;margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px 12px 18px;box-shadow:0 10px 30px rgba(26,29,35,.25)}
+.bar p{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e8a0ab}
+.bar b{font-family:var(--display);font-size:16px}
+.bar .btn-red:disabled{background:#5a5f68;border-color:#5a5f68}
+.changing{background:var(--ink);color:#f4f3f0;border-radius:var(--radius);padding:16px 18px;margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.changing p{margin:0} .changing b{font-family:var(--display)} .changing .btn{background:transparent;color:#fff;border-color:#5a5f68}
+@media(max-width:560px){.room{gap:10px}.plan{padding:10px}.grp{padding:6px}.seats{gap:4px}.seat{padding:6px 1px}.seat b{font-size:12px;letter-spacing:-.02em}
+@media(max-width:360px){.seat b{font-size:11px}}
+  .seat span{font-size:10px}.slots{gap:6px;grid-template-columns:repeat(2,1fr)}.slot-pick{padding:10px 2px}.slot-pick b{font-size:14px}.slot-pick span{font-size:11px}
+  .card{padding:10px}.cal{border-spacing:2px}.cal td{font-size:13px}.cal td small{font-size:9.5px}.cal th{font-size:10px}.bar b{font-size:14px}}
+</style></head><body>
+<header><div class="wrap nav"><a class=brand href="index.html"><img src="polyu_logo.png" alt="The Hong Kong Polytechnic University">
+<span class=brand-name>Seat <em>Booking</em></span></a><nav class=nav-links><a href="#availability">Date &amp; session</a><a href="#seats">Seat</a><a class=btn href="https://www.polyu.edu.hk/ic/people/engineering-staff/xijunsun/" target=_blank rel=noopener>Contact us</a></nav></div></header>
+<main>
+<div class="wrap hero"><p class=eyebrow>PolyU students &amp; staff &middot; 30 seats</p><h1>Seat availability.</h1><p class=note>Updated <b>Fri 30 Oct 10:11</b> &middot; <a class="btn btn-red" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=1-QJ7A89_06cHnuoBgxUF8-xsgmAUoVOuQeYoLDmUMtUMVFFUTJJUlQ3QzhUUEM2RExMUzZJSk43VS4u&amp;b2b=true" target=_blank rel=noopener>Book with Microsoft Forms</a></p><p class=msg id=stale hidden>This page has not been updated for a while, so it may be out of date.</p><script>if(Date.now()-1793351461151>1800e3)document.getElementById("stale").hidden=false</script>
+<p class=note>Sessions: 08:30-12:30 &middot; 12:30-17:30 &middot; 17:30-22:30 &middot; or the full day &middot; bookings open 7 days ahead</p></div>
+<section id=availability class=wrap>
+<div class=section-head><div><p class=step>Step 1 &middot; Date &amp; session</p><h2>Next 7 days</h2></div><span class=window>Open for booking: <b>Fri 30 Oct &ndash; Thu 5 Nov</b></span></div>
+<div class="card scroll"><table class=cal><tr><th class=slot></th><th class=today>Today<br>30/10</th><th>Sat<br>31/10</th><th>Sun<br>1/11</th><th>Mon<br>2/11</th><th>Tue<br>3/11</th><th>Wed<br>4/11</th><th>Thu<br>5/11</th></tr><tr><th class=slot>08:30<br>&ndash;12:30</th><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-10-30-0.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-10-31-0.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-01-0.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-02-0.html#seats">0%<small>0/30</small></a></td><td class="" style="background:linear-gradient(90deg,hsl(120,55%,84%) 0%,hsl(120,55%,84%) 0%,var(--class) 0%,var(--class) 75%,hsl(120,55%,84%) 75%,hsl(120,55%,84%) 100%)" title="0/30 booked; class 08:30-11:30"><a href="2026-11-03-0.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-04-0.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-05-0.html#seats">0%<small>0/30</small></a></td></tr><tr><th class=slot>12:30<br>&ndash;17:30</th><td class="" style="background:hsl(96,55%,84%)" title="6/30 booked"><a href="2026-10-30-1.html#seats">20%<small>6/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-10-31-1.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-01-1.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-02-1.html#seats">0%<small>0/30</small></a></td><td class=" on" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-03-1.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-04-1.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-05-1.html#seats">0%<small>0/30</small></a></td></tr><tr><th class=slot>17:30<br>&ndash;22:30</th><td class="" style="background:hsl(112,55%,84%)" title="2/30 booked"><a href="2026-10-30-2.html#seats">6%<small>2/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-10-31-2.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-01-2.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-02-2.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-03-2.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-04-2.html#seats">0%<small>0/30</small></a></td><td class="" style="background:hsl(120,55%,84%)" title="0/30 booked"><a href="2026-11-05-2.html#seats">0%<small>0/30</small></a></td></tr></table>
+<div class=legend><span>Empty <i class=grad></i>Full</span><span><i style="background:var(--class)"></i>Class (room in use)</span><span>Click a cell to see that session</span></div></div>
+<div class=slots><a class="slot-pick" href="2026-11-03-0.html#seats"><b>08:30-12:30</b><span>30 seats left</span></a><a class="slot-pick on" href="2026-11-03-1.html#seats"><b>12:30-17:30</b><span>30 seats left</span></a><a class="slot-pick" href="2026-11-03-2.html#seats"><b>17:30-22:30</b><span>30 seats left</span></a><a class="slot-pick" href="2026-11-03-3.html#seats"><b>Full day</b><span>30 free all day</span></a></div>
+</section>
+<section id=seats class=wrap>
+<div class=section-head><div><p class=step>Step 2 &middot; Seat</p><h2>Tuesday, 3 November &middot; 12:30-17:30</h2></div></div>
+
+<div class=legend><span><i style="background:var(--free);border:1px solid var(--free-line)"></i>Free</span>
+
+<span><i style="background:var(--taken);border:1px solid var(--taken-line)"></i>Booked</span>
+<span><i style="background:var(--class);border:1px solid var(--class-line)"></i>Class (room in use)</span></div>
+<form method=post action="/book" id=f data-when="Tue 3 Nov, 12:30-17:30">
+<input type=hidden name=day value="2026-11-03"><input type=hidden name=slot value="1">
+<div class=plan><div class=room><div class=grp><div class=seats><div class=seat><b>T01-A</b><span>Free</span></div><div class=seat><b>T01-B</b><span>Free</span></div><div class=seat><b>T01-C</b><span>Free</span></div></div><div class="desk a">Table T01</div><div class="desk b">Table T02</div><div class=seats><div class=seat><b>T02-A</b><span>Free</span></div><div class=seat><b>T02-B</b><span>Free</span></div><div class=seat><b>T02-C</b><span>Free</span></div></div></div><div class=grp><div class=seats><div class=seat><b>T03-A</b><span>Free</span></div><div class=seat><b>T03-B</b><span>Free</span></div><div class=seat><b>T03-C</b><span>Free</span></div></div><div class="desk a">Table T03</div><div class="desk b">Table T04</div><div class=seats><div class=seat><b>T04-A</b><span>Free</span></div><div class=seat><b>T04-B</b><span>Free</span></div><div class=seat><b>T04-C</b><span>Free</span></div></div></div><div class=grp><div class=seats><div class=seat><b>T05-A</b><span>Free</span></div><div class=seat><b>T05-B</b><span>Free</span></div><div class=seat><b>T05-C</b><span>Free</span></div></div><div class="desk a">Table T05</div><div class="desk b">Table T06</div><div class=seats><div class=seat><b>T06-A</b><span>Free</span></div><div class=seat><b>T06-B</b><span>Free</span></div><div class=seat><b>T06-C</b><span>Free</span></div></div></div><div class=grp><div class=seats><div class=seat><b>T07-A</b><span>Free</span></div><div class=seat><b>T07-B</b><span>Free</span></div><div class=seat><b>T07-C</b><span>Free</span></div></div><div class="desk a">Table T07</div><div class="desk b">Table T08</div><div class=seats><div class=seat><b>T08-A</b><span>Free</span></div><div class=seat><b>T08-B</b><span>Free</span></div><div class=seat><b>T08-C</b><span>Free</span></div></div></div><div class=grp><div class=seats><div class=seat><b>T09-A</b><span>Free</span></div><div class=seat><b>T09-B</b><span>Free</span></div><div class=seat><b>T09-C</b><span>Free</span></div></div><div class="desk a">Table T09</div><div class="desk b">Table T10</div><div class=seats><div class=seat><b>T10-A</b><span>Free</span></div><div class=seat><b>T10-B</b><span>Free</span></div><div class=seat><b>T10-C</b><span>Free</span></div></div></div></div>
+<div class=plan-foot><span>2 &times; 2 table groups &middot; seats A B C</span><span>30 of 30 free</span></div></div>
+
+</form>
+</section>
+</main>
+<footer><div class=wrap>The Hong Kong Polytechnic University &middot; Seat booking &middot; Questions? <a href="https://www.polyu.edu.hk/ic/people/engineering-staff/xijunsun/" target=_blank rel=noopener>Contact us</a></div></footer></body></html>
